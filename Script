@@ -1,0 +1,36 @@
+function main(workbook: ExcelScript.Workbook, records: Array<any>) {
+  // Get or create sheet
+  const sheet = workbook.getWorksheet("Sheet1") || workbook.addWorksheet("Sheet1");
+  
+  // Clear existing data if any
+  sheet.getUsedRange()?.clear();
+  
+  // Define headers (must match your Select action)
+  const headers = [
+    "ID", 
+    "Name", 
+    "Email",
+    "Department",
+    "Phone",
+    "Status",
+    "Created Date",
+    "Modified Date",
+    "Address", 
+    "Country"
+  ];
+  
+  // Add headers if sheet is empty
+  if (sheet.getUsedRange() == null) {
+    sheet.getRange("A1:J1").setValues([headers]);
+  }
+  
+  // Insert all records in one operation
+  if (records.length > 0) {
+    sheet.getRange("A2")
+      .getResizedRange(records.length-1, headers.length-1)
+      .setValues(records);
+  }
+  
+  // Auto-fit columns for better readability
+  sheet.getUsedRange().getFormat().autofitColumns();
+}
